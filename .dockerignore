@@ -1,0 +1,10 @@
+**/.vscode
+Dockerfile*
+docker-compose*
+**/.dockerignore
+**/.git
+**/.gitignore
+**/out
+**/Makefile
+**/*.md
+**/LICENSE

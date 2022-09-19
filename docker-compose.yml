@@ -1,0 +1,15 @@
+version: "0.1.0"
+services:
+  # test-app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   stdin_open: true
+  db:
+    image: mongo:4.4
+    container_name: "mongo4.4"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
+    ports:
+      - "27017:27017"

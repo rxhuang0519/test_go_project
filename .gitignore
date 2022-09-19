@@ -13,9 +13,11 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-
+out/
+*/test/
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
+config.*.env
+docker-compose.*.yml
 # Go workspace file
 go.work
