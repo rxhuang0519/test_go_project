@@ -64,7 +64,6 @@ func initConfig() {
 		// Find home directory.
 		// home, err := os.UserHomeDir()
 		// cobra.CheckErr(err)
-		fmt.Println("$", env)
 		// Search config in home directory with name ".cobra" (without extension).
 		viper.AddConfigPath("./configs")
 		viper.SetConfigType("env")
@@ -85,4 +84,10 @@ func initConfig() {
 			logger.Error.Fatalln("Override config failed:", viper.ConfigFileUsed(), "\n", err)
 		}
 	}
+}
+func ConfigFile() string {
+	return cfgFile
+}
+func ENV() string {
+	return env
 }

@@ -16,8 +16,8 @@ type Config struct {
 	LINE_USER_ID        string `mapstructure:"LINE_USER_ID"`
 }
 
-func Load() Config {
-	var config Config
+func Load() *Config {
+	var config *Config
 	err := viper.Unmarshal(&config)
 	if err != nil {
 		logger.Error.Fatalln("Load config failed:\n", err)

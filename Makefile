@@ -16,6 +16,12 @@ build:
 	@echo "Building..."
 	@go build -o ./out/$(BINARY_NAME).out .
 
+run: build
+	@echo "Docker Compose Up..."
+	@docker compose up -d
+	@echo "Running..."
+	@./out/$(BINARY_NAME).out
+
 run-dev: build
 	@echo "Docker Compose Up..."
 	@docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
@@ -28,12 +34,6 @@ run-prod: build
 	@echo "Running..."
 	@./out/$(BINARY_NAME).out --env prod
 
-run: build
-	@echo "Docker Compose Up..."
-	@docker compose up -d
-	@echo "Running..."
-	@./out/$(BINARY_NAME).out
-	
 stop:
 	@echo "Docker Compose Down..."
 	docker compose down

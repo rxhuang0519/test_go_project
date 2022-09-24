@@ -1,4 +1,4 @@
-package db
+package repository
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-const CONNECT_TIME_OUT = 10 * time.Second
+const CONNECT_TIME_OUT = 5 * time.Second
 
 func generateConnectOptions(config *configs.Config) string {
 	options := ""
@@ -59,5 +59,4 @@ func Disconnect(client *mongo.Client) error {
 	}
 	logger.Info.Println("Disconnect complete.")
 	return nil
-
 }
