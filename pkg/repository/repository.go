@@ -15,7 +15,7 @@ type Repository struct {
 
 func NewRepository(dbName string, config *configs.Config, client *mongo.Client) *Repository {
 	if client == nil {
-		client, _ = Setup(context.Background(), config)
+		client = NewClient(context.Background(), config)
 	}
 	return &Repository{
 		client: client,

@@ -51,7 +51,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./configs/.config.yaml)")
 	rootCmd.PersistentFlags().StringVar(&env, "env", "", "environment (dev|prod)")
-
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

@@ -11,20 +11,35 @@ import (
 	"test_go_project/pkg/line"
 	"test_go_project/pkg/repository"
 	"test_go_project/pkg/routers"
+
+	"github.com/gin-gonic/gin"
+	"github.com/line/line-bot-sdk-go/linebot"
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
+var (
+	dbClient   *mongo.Client
+	lineClient *linebot.Client
+	rootRouter *gin.Engine
 )
 
 func main() {
+	defer repository.Disconnect(dbClient)
+	start("demo")
+}
+func init() {
 	cmd.Execute()
-	ctx := context.Background()
 	cfg := configs.Load()
-	// _cl, _ := line.Setup(cfg)
-	client, _ := repository.Setup(ctx, cfg)
-	defer repository.Disconnect(client)
-	db := client.Database("demo")
-
-	router := routers.NewRouter()
-	lineClient := line.NewClient(cfg)
-	lineHandler := handlers.NewLineHandler(cfg, lineClient, db)
-	routers.RouteLine(router.Group("/"), lineHandler)
-	router.Run()
+	ctx := context.Background()
+	dbClient = repository.NewClient(ctx, cfg)
+	lineClient = line.NewClient(cfg)
+	rootRouter = routers.NewRouter()
+}
+func start(dbName string) {
+	db := dbClient.Database(dbName)
+	lineHandler := handlers.NewLineHandler(lineClient, db)
+	msgHandler := handlers.NewMessageHandler(db)
+	routers.RouteLine(rootRouter.Group("/"), lineHandler)
+	routers.RouteMessage(rootRouter.Group("/messages"), msgHandler)
+	rootRouter.Run()
 }

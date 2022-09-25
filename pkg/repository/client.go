@@ -24,7 +24,7 @@ func generateURI(config *configs.Config) string {
 	logger.Debug.Println("uri:", uri)
 	return uri
 }
-func Setup(ctx context.Context, config *configs.Config) (*mongo.Client, error) {
+func NewClient(ctx context.Context, config *configs.Config) *mongo.Client {
 	logger.Info.Println("Setup DB...")
 	dbUri := generateURI(config)
 	client, err := mongo.NewClient(options.Client().ApplyURI(dbUri))
@@ -33,12 +33,12 @@ func Setup(ctx context.Context, config *configs.Config) (*mongo.Client, error) {
 	if err != nil {
 		logger.Error.Panicln("Setup DB client failed:\n", err)
 	}
-	err = Connect(ctx, client)
+	Connect(ctx, client)
 	logger.Info.Println("Setup DB complete.")
-	return client, err
+	return client
 }
 
-func Connect(ctx context.Context, client *mongo.Client) error {
+func Connect(ctx context.Context, client *mongo.Client) {
 	logger.Info.Println("Connecting To DB...")
 	if err := client.Connect(ctx); err != nil {
 		logger.Error.Panicln("Connection failed:\n", err)
@@ -48,7 +48,6 @@ func Connect(ctx context.Context, client *mongo.Client) error {
 	}
 
 	logger.Info.Println("Connection complete.")
-	return nil
 
 }
 func Disconnect(client *mongo.Client) error {

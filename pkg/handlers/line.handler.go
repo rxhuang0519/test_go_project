@@ -1,13 +1,7 @@
 package handlers
 
 import (
-	"bytes"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"errors"
-	"io"
-	"test_go_project/configs"
 	line "test_go_project/pkg/line/handlers"
 	"test_go_project/pkg/logger"
 
@@ -20,48 +14,48 @@ import (
 //		Reply()
 //	}
 type LineHandler struct {
-	cfg    *configs.Config
+	// cfg    *configs.Config
 	client *linebot.Client
 	db     *mongo.Database
 }
 
-func NewLineHandler(cfg *configs.Config, client *linebot.Client, db *mongo.Database) *LineHandler {
+func NewLineHandler(client *linebot.Client, db *mongo.Database) *LineHandler {
 	return &LineHandler{
-		cfg:    cfg,
+		// cfg:    cfg,
 		client: client,
 		db:     db,
 	}
 }
 
-func (handler *LineHandler) Auth(ctx *gin.Context) {
-	signature := ctx.Request.Header.Get("x-line-signature")
-	isVaild := false
-	/* Read Body */
-	if body, err := ctx.GetRawData(); err != nil {
-		logger.Error.Println("Read Error:", err)
-	} else {
-		/* Reset Reader */
-		ctx.Request.Body = io.NopCloser(bytes.NewBuffer(body))
-		/* Decoding */
-		if decoded, err := base64.StdEncoding.DecodeString(signature); err != nil {
-			logger.Error.Println("Decode Error:", err)
-		} else {
-			/* Expected hash */
-			hash := hmac.New(sha256.New, []byte(handler.cfg.LINE_CHANNEL_SECRET))
-			hash.Write(body)
-			isVaild = hmac.Equal(decoded, hash.Sum(nil))
-			logger.Info.Println("isVaild: ", isVaild)
-			logger.Info.Println("body:", string(body))
-		}
-	}
-	// return isVaild
-	if isVaild {
-		ctx.Next()
-	} else {
-		logger.Error.Println("Authentication failed:", signature)
-		ctx.AbortWithStatus(401)
-	}
-}
+//	func (handler *LineHandler) Auth(ctx *gin.Context) {
+//		signature := ctx.Request.Header.Get("x-line-signature")
+//		isVaild := false
+//		/* Read Body */
+//		if body, err := ctx.GetRawData(); err != nil {
+//			logger.Error.Println("Read Error:", err)
+//		} else {
+//			/* Reset Reader */
+//			ctx.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+//			/* Decoding */
+//			if decoded, err := base64.StdEncoding.DecodeString(signature); err != nil {
+//				logger.Error.Println("Decode Error:", err)
+//			} else {
+//				/* Expected hash */
+//				hash := hmac.New(sha256.New, []byte(handler.cfg.LINE_CHANNEL_SECRET))
+//				hash.Write(body)
+//				isVaild = hmac.Equal(decoded, hash.Sum(nil))
+//				logger.Info.Println("isVaild: ", isVaild)
+//				logger.Info.Println("body:", string(body))
+//			}
+//		}
+//		// return isVaild
+//		if isVaild {
+//			ctx.Next()
+//		} else {
+//			logger.Error.Println("Authentication failed:", signature)
+//			ctx.AbortWithStatus(401)
+//		}
+//	}
 func (handler *LineHandler) parseRequest(ctx *gin.Context) []*linebot.Event {
 	logger.Info.Println("Line Parse")
 	events, err := handler.client.ParseRequest(ctx.Request)

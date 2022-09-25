@@ -32,7 +32,7 @@ func LoadTestConfig(env string) *configs.Config {
 	return config
 }
 func SetupTestClient(env string) *mongo.Client {
-	client, _ := repository.Setup(context.Background(), LoadTestConfig(env))
+	client := repository.NewClient(context.Background(), LoadTestConfig(env))
 	return client
 }
 func SetupTestDB(env string, name string) *mongo.Database {

@@ -22,6 +22,6 @@ func Load() *Config {
 	if err != nil {
 		logger.Error.Fatalln("Load config failed:\n", err)
 	}
-	logger.Info.Println("Load config complete.")
+	logger.Info.Println("Load config complete.", *config)
 	return config
 }
