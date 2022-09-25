@@ -63,7 +63,7 @@ func TestFind(t *testing.T) {
 	input := models.NewBase()
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
-	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreatedAt})
+	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreateAt})
 	assert.NoError(t, err)
 	assert.Equal(t, expectDoc, docs[0])
 	t.Log("[TestFindOne] Complete. result:", docs)
@@ -85,12 +85,12 @@ func TestUpdateById(t *testing.T) {
 	createdDoc, _ := service.Create(testCtx, createInput)
 	defer service.DeleteById(testCtx, createdDoc.Id.Hex())
 	input := &models.Base{
-		CreatedAt: time.Now().Truncate(time.Millisecond).AddDate(0, 0, 1).UTC(),
-		UpdatedAt: time.Now().Truncate(time.Millisecond).AddDate(0, 0, 1).UTC(),
+		CreateAt: time.Now().Truncate(time.Millisecond).AddDate(0, 0, 1).UTC(),
+		UpdateAt: time.Now().Truncate(time.Millisecond).AddDate(0, 0, 1).UTC(),
 	}
 	expectedDoc := createdDoc
-	expectedDoc.CreatedAt = input.CreatedAt
-	expectedDoc.UpdatedAt = input.UpdatedAt
+	expectedDoc.CreateAt = input.CreateAt
+	expectedDoc.UpdateAt = input.UpdateAt
 	doc, err := service.UpdateById(testCtx, createdDoc.Id.Hex(), input)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedDoc, doc)

@@ -7,7 +7,9 @@ import (
 	"test_go_project/pkg/repository"
 
 	"github.com/spf13/viper"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func LoadTestConfig(env string) *configs.Config {
@@ -36,5 +38,6 @@ func SetupTestClient(env string) *mongo.Client {
 func SetupTestDB(env string, name string) *mongo.Database {
 	client := SetupTestClient(env)
 	db := client.Database(name)
+	db.Collection("users").Indexes().CreateOne(context.TODO(), mongo.IndexModel{Keys: bson.M{"userId": 1}, Options: options.Index().SetUnique(true)})
 	return db
 }

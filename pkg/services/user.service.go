@@ -14,12 +14,17 @@ type UserService struct {
 	Service[models.User]
 }
 
+func (service *UserService) setIndex() {
+	service.collection.Indexes().CreateOne(context.TODO(), mongo.IndexModel{Keys: bson.D{{Key: "userId", Value: 1}}, Options: options.Index().SetUnique(true)})
+}
 func NewUserService(db *mongo.Database) *UserService {
-	return &UserService{
+	service := &UserService{
 		Service: Service[models.User]{
 			collection: db.Collection("users"),
 		},
 	}
+	service.setIndex()
+	return service
 }
 func (service *UserService) FindByUserId(ctx context.Context, userId string) ([]*models.User, error) {
 	logger.Debug.Printf("[FindByUserId] Start. ( userId: %s )\n", userId)

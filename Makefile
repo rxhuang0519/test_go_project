@@ -34,6 +34,8 @@ run-prod: build
 	@echo "Running..."
 	@./out/$(BINARY_NAME).out --env prod
 
+start:
+	ngrok http 8080
 stop:
 	@echo "Docker Compose Down..."
 	docker compose down

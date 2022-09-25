@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+	"test_go_project/configs"
 	"test_go_project/pkg/logger"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,7 +13,10 @@ type Repository struct {
 	db     *mongo.Database
 }
 
-func NewRepositoryService(client *mongo.Client, dbName string) *Repository {
+func NewRepository(dbName string, config *configs.Config, client *mongo.Client) *Repository {
+	if client == nil {
+		client, _ = Setup(context.Background(), config)
+	}
 	return &Repository{
 		client: client,
 		db:     client.Database(dbName),

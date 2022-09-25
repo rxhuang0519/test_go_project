@@ -21,11 +21,27 @@ func NewMessageService(db *mongo.Database) *MessageService {
 		},
 	}
 }
-func (service *MessageService) FindByMessage(ctx context.Context, message string) ([]*models.Message, error) {
-	logger.Debug.Printf("[FindByMessage] Start. ( message: %s )\n", message)
-	filter := bson.M{"message": message}
-	opts := options.Find().SetSort(bson.D{{Key: "message", Value: 1}})
+func (service *MessageService) FindByText(ctx context.Context, text string) ([]*models.Message, error) {
+	logger.Debug.Printf("[FindByText] Start. ( text: %s )\n", text)
+	filter := bson.M{"text": text}
+	opts := options.Find().SetSort(bson.D{{Key: "createdAt", Value: 1}})
 	result, err := service.Find(ctx, filter, opts)
-	logger.Debug.Println("[FindByMessage] Complete.")
+	logger.Debug.Println("[FindByText] Complete.")
+	return result, err
+}
+func (service *MessageService) FindByMessageId(ctx context.Context, messageId string) ([]*models.Message, error) {
+	logger.Debug.Printf("[FindByMessageId] Start. ( messageId: %s )\n", messageId)
+	filter := bson.M{"messageId": messageId}
+	opts := options.Find().SetSort(bson.D{{Key: "createdAt", Value: 1}})
+	result, err := service.Find(ctx, filter, opts)
+	logger.Debug.Println("[FindByMessageId] Complete.")
+	return result, err
+}
+func (service *MessageService) FindByUserId(ctx context.Context, userId string) ([]*models.Message, error) {
+	logger.Debug.Printf("[FindByUserId] Start. ( userId: %s )\n", userId)
+	filter := bson.M{"userId": userId}
+	opts := options.Find().SetSort(bson.D{{Key: "createdAt", Value: 1}})
+	result, err := service.Find(ctx, filter, opts)
+	logger.Debug.Println("[FindByUserId] Complete.")
 	return result, err
 }

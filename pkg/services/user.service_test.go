@@ -63,7 +63,7 @@ func TestFind_User(t *testing.T) {
 	input := models.NewUser("test Find")
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
-	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreatedAt})
+	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreateAt})
 	assert.NoError(t, err)
 	assert.Equal(t, expectDoc, docs[0])
 	t.Log("[TestFindOne] Complete. result:", docs)

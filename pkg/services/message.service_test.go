@@ -8,20 +8,42 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func TestFindByMessage(t *testing.T) {
+func TestFindByText_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test FindByMessage")
+	input := models.NewMessage("testId")
+	input.Text = "test FindByMessage"
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
-	docs, err := service.FindByMessage(testCtx, input.Message)
+	docs, err := service.FindByText(testCtx, input.Text)
 	assert.NoError(t, err)
 	assert.Equal(t, expectDoc, docs[0])
-	t.Log("[TestFindOne] Complete. result:", docs[0])
+	t.Log("[TestFindByText] Complete. result:", docs[0])
+}
+func TestFindByMessageId_Message(t *testing.T) {
+	service := NewMessageService(testDB)
+	input := models.NewMessage("testId0")
+	expectDoc, _ := service.Create(testCtx, input)
+	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
+	docs, err := service.FindByMessageId(testCtx, input.MessageId)
+	assert.NoError(t, err)
+	assert.Equal(t, expectDoc, docs[0])
+	t.Log("[TestFindByMessageId] Complete. result:", docs[0])
+}
+func TestFindByUserId_Message(t *testing.T) {
+	service := NewMessageService(testDB)
+	input := models.NewMessage("testId1")
+	input.UserId = "test UserId"
+	expectDoc, _ := service.Create(testCtx, input)
+	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
+	docs, err := service.FindByUserId(testCtx, input.UserId)
+	assert.NoError(t, err)
+	assert.Equal(t, expectDoc, docs[0])
+	t.Log("[TestFindByUserId] Complete. result:", docs[0])
 }
 
 func TestCreate_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test Create")
+	input := models.NewMessage("testId2")
 	doc, err := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, doc.Id.Hex())
 	assert.NoError(t, err)
@@ -30,7 +52,7 @@ func TestCreate_Message(t *testing.T) {
 }
 func TestFindById_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test FindById")
+	input := models.NewMessage("testId3")
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
 	doc, err := service.FindById(testCtx, expectDoc.Id.Hex())
@@ -40,7 +62,7 @@ func TestFindById_Message(t *testing.T) {
 }
 func TestFindOne_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test FindOne")
+	input := models.NewMessage("testId4")
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
 	doc, err := service.FindOne(testCtx, bson.M{"_id": expectDoc.Id})
@@ -50,17 +72,17 @@ func TestFindOne_Message(t *testing.T) {
 }
 func TestFind_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test Find")
+	input := models.NewMessage("testId5")
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
-	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreatedAt})
+	docs, err := service.Find(testCtx, bson.M{"createdAt": input.CreateAt})
 	assert.NoError(t, err)
 	assert.Equal(t, expectDoc, docs[0])
 	t.Log("[TestFindOne] Complete. result:", docs)
 }
 func TestFindAll_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test FindAll")
+	input := models.NewMessage("testId6")
 	expectDoc, _ := service.Create(testCtx, input)
 	defer service.DeleteById(testCtx, expectDoc.Id.Hex())
 	docs, err := service.FindAll(testCtx)
@@ -71,14 +93,14 @@ func TestFindAll_Message(t *testing.T) {
 }
 func TestUpdateById_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	createInput := models.NewMessage("test UpdateById::Before")
+	createInput := models.NewMessage("testId7")
 	createdDoc, _ := service.Create(testCtx, createInput)
 	defer service.DeleteById(testCtx, createdDoc.Id.Hex())
 	input := &models.Message{
-		Message: "test UpdateById::After",
+		Text: "test UpdateById::After",
 	}
 	expectedDoc := createdDoc
-	expectedDoc.Message = input.Message
+	expectedDoc.Text = input.Text
 	doc, err := service.UpdateById(testCtx, createdDoc.Id.Hex(), input)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedDoc, doc)
@@ -86,7 +108,7 @@ func TestUpdateById_Message(t *testing.T) {
 }
 func TestDeleteById_Message(t *testing.T) {
 	service := NewMessageService(testDB)
-	input := models.NewMessage("test DeleteById")
+	input := models.NewMessage("testId8")
 	doc, _ := service.Create(testCtx, input)
 	err := service.DeleteById(testCtx, doc.Id.Hex())
 	assert.NoError(t, err)
