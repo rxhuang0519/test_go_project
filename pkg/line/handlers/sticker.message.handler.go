@@ -34,3 +34,7 @@ func (handler *StickerMessageHandler) SaveMessage(ctx *gin.Context, message line
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save Sticker Message Complete.")
 }
+func (handler *StickerMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply Sticker Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve Sticker."))
+}

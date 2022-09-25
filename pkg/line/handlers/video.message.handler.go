@@ -26,3 +26,7 @@ func (handler *VideoMessageHandler) SaveMessage(ctx *gin.Context, message linebo
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save Video Message Complete.")
 }
+func (handler *VideoMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply Video Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve Video."))
+}

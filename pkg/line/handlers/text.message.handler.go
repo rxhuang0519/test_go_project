@@ -26,3 +26,7 @@ func (handler *TextMessageHandler) SaveMessage(ctx *gin.Context, message linebot
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save Text Message Complete.")
 }
+func (handler *TextMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply Text Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve Text."))
+}

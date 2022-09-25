@@ -26,3 +26,7 @@ func (handler *AudioMessageHandler) SaveMessage(ctx *gin.Context, message linebo
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save Audio Message Complete.")
 }
+func (handler *AudioMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply Audio Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve Audio."))
+}

@@ -123,6 +123,11 @@ func (handler *LineHandler) handleMessage(ctx *gin.Context, event *linebot.Event
 		logger.Info.Printf("Unknown Message::%T: %+v", msg, msg)
 	}
 	h.SaveMessage(ctx, event.Message, event.Source, event.Timestamp)
+	if res, err := h.Reply(ctx, event.ReplyToken).Do(); err != nil {
+		ctx.AbortWithError(500, err)
+	} else {
+		logger.Info.Println("Handle Message Response RequestID:", res.RequestID)
+	}
 	logger.Info.Println("Handle Message Complete.")
 
 }

@@ -26,3 +26,7 @@ func (handler *FileMessageHandler) SaveMessage(ctx *gin.Context, message linebot
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save File Message Complete.")
 }
+func (handler *FileMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply File Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve File."))
+}

@@ -26,3 +26,7 @@ func (handler *ImgMessageHandler) SaveMessage(ctx *gin.Context, message linebot.
 	handler.MessageHandler.saveMessage(ctx, input)
 	logger.Info.Println("Save Img Message Complete.")
 }
+func (handler *ImgMessageHandler) Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall {
+	logger.Info.Println("Reply Image Message...: ", ctx.Keys["requestId"])
+	return handler.client.ReplyMessage(replyToken, linebot.NewTextMessage("Recieve Image."))
+}

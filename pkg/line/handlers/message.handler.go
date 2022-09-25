@@ -13,6 +13,7 @@ import (
 
 type IMessageHandler interface {
 	SaveMessage(ctx *gin.Context, message linebot.Message, source *linebot.EventSource, receiveAt time.Time)
+	Reply(ctx *gin.Context, replyToken string) *linebot.ReplyMessageCall
 }
 type MessageHandler struct {
 	client     *linebot.Client
