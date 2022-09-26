@@ -42,3 +42,15 @@ LINE_USER_ID="
 ```
 make run
 ```
+#### Query Messages
+##### Get all messages
+
+- GET http://localhost:8080/messages
+##### Get messages by userId
+
+- GET http://localhost:8080/messages/usr/{userId}
+- GET http://localhost:8080/messages?usr={userId}
+##### Get messages by messageId
+
+- GET http://localhost:8080/messages/{messageId}
+- GET http://localhost:8080/messages?id={messageId}
