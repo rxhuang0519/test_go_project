@@ -54,3 +54,7 @@ make run
 
 - GET http://localhost:8080/messages/{messageId}
 - GET http://localhost:8080/messages?id={messageId}
+
+# Demo Video
+
+- https://youtu.be/ft4sU-A5pyQ
