@@ -8,4 +8,5 @@ import (
 
 func RouteLine(route *gin.RouterGroup, handler *handlers.LineHandler) {
 	route.POST("/", handler.Webhook)
+	route.POST("/send/:userId", handler.Send)
 }

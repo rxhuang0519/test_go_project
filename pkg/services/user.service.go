@@ -6,6 +6,7 @@ import (
 	"test_go_project/pkg/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -25,6 +26,20 @@ func NewUserService(db *mongo.Database) *UserService {
 	}
 	service.setIndex()
 	return service
+}
+func (service *UserService) Upsert(ctx context.Context, userId string, input *models.User) (*models.User, error) {
+	logger.Debug.Printf("[Upsert] Start. ( userId: %s )\n", userId)
+	filter := bson.M{"userId": userId}
+	input.Id = primitive.NilObjectID
+	updateInput := bson.D{{Key: "$set", Value: input}}
+	var result *models.User
+	err := service.collection.FindOneAndUpdate(ctx, filter, updateInput, options.FindOneAndUpdate().SetReturnDocument(1).SetUpsert(true)).Decode(&result)
+	if err != nil {
+		logger.Error.Panicln("[Upsert] Error:", err)
+		return nil, err
+	}
+	logger.Debug.Println("[Upsert] Complete.")
+	return result, err
 }
 func (service *UserService) FindByUserId(ctx context.Context, userId string) ([]*models.User, error) {
 	logger.Debug.Printf("[FindByUserId] Start. ( userId: %s )\n", userId)

@@ -42,7 +42,7 @@ LINE_USER_ID="
 ```
 make run
 ```
-#### Query Messages
+#### Messages
 ##### Get all messages
 
 - GET http://localhost:8080/messages
@@ -55,6 +55,9 @@ make run
 - GET http://localhost:8080/messages/{messageId}
 - GET http://localhost:8080/messages?id={messageId}
 
+##### Send message to user by userId
+
+- POST http://localhost:8080/send/{userId}
 # Demo Video
 
 - https://youtu.be/ft4sU-A5pyQ

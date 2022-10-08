@@ -41,9 +41,12 @@ func (handler *UserSourceHandler) newSource(id string, receiveAt time.Time) *mod
 }
 func (handler *UserSourceHandler) SaveSource(ctx *gin.Context, source *linebot.EventSource, receiveAt time.Time) {
 	logger.Info.Println("Save User Source...: ", ctx.Keys["requestId"])
-	if id := source.UserID; !handler.checkSource(ctx, id) {
-		input := handler.newSource(id, receiveAt)
-		handler.usrService.Create(ctx, input)
-	}
+	id := source.UserID
+	input := handler.newSource(id, receiveAt)
+	handler.usrService.Upsert(ctx, id, input)
+	// if id := source.UserID; !handler.checkSource(ctx, id) {
+	// 	input := handler.newSource(id, receiveAt)
+	// 	handler.usrService.Create(ctx, input)
+	// }
 	logger.Info.Println("Save User Source Complete.")
 }

@@ -68,7 +68,15 @@ func (handler *LineHandler) parseRequest(ctx *gin.Context) []*linebot.Event {
 	}
 	return events
 }
-
+func (handler *LineHandler) Send(ctx *gin.Context) {
+	usrId := ctx.Param("userId")
+	logger.Info.Printf("Send to...: %s", usrId)
+	if res, err := handler.client.PushMessage(usrId, linebot.NewTextMessage("Hello")).Do(); err != nil {
+		ctx.AbortWithError(500, err)
+	} else {
+		logger.Info.Println("Send Message Response RequestID:", res.RequestID)
+	}
+}
 func (handler *LineHandler) Webhook(ctx *gin.Context) {
 	logger.Info.Println("Handle...")
 	events := handler.parseRequest(ctx)
